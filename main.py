@@ -1,27 +1,38 @@
-def caesar_cipher(text, shift):
-    # Norsk alfabet
+def caesar_cipher(text, shift, mode='encrypt'):
+    # Norsk alfabet med æ, ø og å
     alphabet = 'abcdefghijklmnopqrstuvwxyzæøå'
     alphabet_upper = alphabet.upper()
-    encrypted_text = ''
+    result = ''
+
+    if mode == 'decrypt':
+        shift = -shift  # Roter motsatt vei
 
     for char in text:
         if char in alphabet:
             index = alphabet.index(char)
             shifted_index = (index + shift) % len(alphabet)
-            encrypted_text += alphabet[shifted_index]
+            result += alphabet[shifted_index]
         elif char in alphabet_upper:
             index = alphabet_upper.index(char)
             shifted_index = (index + shift) % len(alphabet_upper)
-            encrypted_text += alphabet_upper[shifted_index]
+            result += alphabet_upper[shifted_index]
         else:
-            # Behold tegn som ikkje er bokstaver
-            encrypted_text += char
+            # Behold mellomrom og tegn
+            result += char
 
-    return encrypted_text
+    return result
 
 # Brukerinput
-text = input("Skriv inn teksten du vil kryptere: ")
-shift = int(input("Hvor mange plasser vil du rotere bokstavene? "))
+mode = input("Vil du kryptere eller dekryptere? (skriv 'k' eller 'd'): ").strip().lower()
+text = input("Skriv inn teksten: ")
+shift = int(input("Hvor mange plasser skal det roteres med? "))
 
-kryptert = caesar_cipher(text, shift)
-print("Kryptert tekst:", kryptert)
+if mode == 'k':
+    output = caesar_cipher(text, shift, mode='encrypt')
+elif mode == 'd':
+    output = caesar_cipher(text, shift, mode='decrypt')
+else:
+    print("Ugyldig valg.")
+    exit()
+
+print("Resultat:", output)
